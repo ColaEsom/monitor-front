@@ -1,15 +1,18 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <!-- <IndexView msg="Welcome to Your Vue.js App"/> -->
+  <TaskProcessors msg="Welcome to Your Vue.js App"/>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import 'element-plus/dist/index.css';
+// import IndexView from './components/views/IndexView.vue';
+import TaskProcessors from './components/views/TaskProcessors.vue';
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    // IndexView
+    TaskProcessors
   }
 }
 </script>
