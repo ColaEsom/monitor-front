@@ -1,18 +1,17 @@
 <template>
-  <!-- <IndexView msg="Welcome to Your Vue.js App"/> -->
-  <TaskProcessors msg="Welcome to Your Vue.js App"/>
+  <IndexView msg="Welcome to Your Vue.js App"/>
+  <!-- <TaskProcessors msg="Welcome to Your Vue.js App"/> -->
 </template>
 
 <script>
-import 'element-plus/dist/index.css';
-// import IndexView from './components/views/IndexView.vue';
-import TaskProcessors from './components/views/TaskProcessors.vue';
+import IndexView from './components/views/IndexView.vue';
+// import TaskProcessors from './components/views/TaskProcessors.vue';
 
 export default {
   name: 'App',
   components: {
-    // IndexView
-    TaskProcessors
+    IndexView
+    // TaskProcessors
   }
 }
 </script>

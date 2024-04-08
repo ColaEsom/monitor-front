@@ -1,11 +1,12 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import TaskProcessor from '../components/views/TaskProcessors.vue';
+import { defineAsyncComponent } from 'vue'; 
+// import TaskProcessor from '../components/views/TaskProcessors.vue';
 
 const routes = [
   {
     path: '/taskprocessor',
     name: 'TaskProcessor',
-    component: TaskProcessor
+    component: defineAsyncComponent(() => import('../components/views/TaskProcessors.vue'))
   }
 ];
 

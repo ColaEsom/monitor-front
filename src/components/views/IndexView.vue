@@ -1,12 +1,22 @@
 <template>
   <div>
     <el-table :data="tasks" style="width: 100%">
-      <el-table-column prop="product" label="产品ID"></el-table-column>
-      <el-table-column prop="workstation" label="工位ID"></el-table-column>
-      <el-table-column prop="demandNumber" label="需求数量"></el-table-column>
-      <el-table-column prop="completedNumber" label="已完成数量"></el-table-column>
-      <el-table-column :formatter="formatDate" label="创建时间"></el-table-column>
-      <el-table-column :formatter="translateStatus" label="状态"></el-table-column>
+      <el-table-column prop="product" label="产品ID" />
+      <el-table-column prop="workstation" label="工位ID"/>
+      <el-table-column prop="demandNumber" label="需求数量"/>
+      <el-table-column prop="completedNumber" label="已完成数量"/>
+      <el-table-column :formatter="formatDate" label="创建时间"/>
+      <el-table-column :formatter="translateStatus" label="状态"/>
+      <el-table-column fixed="right" label="操作" width="120">
+        <template #default>
+        <el-button link type="primary" size="small" @click="editTask">
+          编辑
+        </el-button>
+        <el-button link type="primary" size="small" @click="deleteTask">
+          删除
+        </el-button>
+      </template>
+      </el-table-column>
     </el-table>
 
     <el-pagination
@@ -35,7 +45,7 @@
 </template>
 
 <script>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { ElTable, ElTableColumn, ElPagination, ElForm, ElFormItem, ElInput, ElButton } from 'element-plus';
 
 export default {
@@ -56,11 +66,16 @@ export default {
     const pages = ref(0);
     const size = ref(10);
     const current = ref(1);
+    const total = ref();
 
     const loadTaskPage = (page, pageSize) => {
+      console.log(page);
+      console.log(pageSize);
       fetch(`/mo/task/page?page=${page}&size=${pageSize}`)
         .then(response => response.json())
         .then(data => {
+          console.log(data);
+          total.value = data.total;
           tasks.value = data.records;
           pages.value = data.pages;
           current.value = data.current;
@@ -99,25 +114,33 @@ export default {
       });
     };
 
-    const translateStatus = (status) => {
-      return status === 'submit' ? '已提交' : status === 'finish' ? '完成' : status;
-    };
-
-    const formatDate = (dateString) => {
-      const date = new Date(dateString);
-      if (isNaN(date.getTime())) { // 检查日期是否有效
-        return '无效日期'; // 日期无效时返回的字符串
+    const formatDate = (createTime) => {
+      const date = new Date(createTime.createTime);
+      if (isNaN(date.getTime())) {
+        return '无效日期';
       }
       const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
       return new Intl.DateTimeFormat('zh-CN', options).format(date).replace(/\//g, '-').replace(',', '');
     };
 
-    // 初始化页面，加载第一页数据
-    loadTaskPage(current.value, size.value);
+    const translateStatus = (status) => {
+      return status.status === 'submit' ? '已提交' : status.status === 'finish' ? '完成' : '未知状态';
+    };
+
 
   const handlePageChange = (newPage) => {
+      console.log('newPage',newPage);
       loadTaskPage(newPage, size.value);
     };
+
+    onMounted(() => {
+      // 初始化页面，加载第一页数据
+      loadTaskPage(current.value, size.value);
+    });
+
+    const handleClick = () => {
+      console.log('click')
+    }
 
     return {
       product,
@@ -132,6 +155,7 @@ export default {
       translateStatus,
       formatDate,
       handlePageChange,
+      handleClick,
     };
   },
 };
