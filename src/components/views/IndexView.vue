@@ -14,7 +14,19 @@
       <el-table-column fixed="right" label="操作" width="150">
         <template #default="{row}">
           <el-button type="primary" size="small" @click="editTask(row)">编辑</el-button>
-          <el-button type="danger" size="small" @click="handleDeleteTask()"> 删除 </el-button>
+          <el-popconfirm
+              width="220"
+              confirm-button-text="OK"
+              cancel-button-text="No, Thanks"
+              :icon="InfoFilled"
+              icon-color="#626AEF"
+              title="Are you sure to delete this?"
+              @confirm="deleteTask(row)"
+            >
+              <template #reference>
+                <el-button type="danger" size="small"> 删除 </el-button>
+              </template>
+            </el-popconfirm>
       </template>
       </el-table-column>
     </el-table>
@@ -68,17 +80,6 @@
       </el-form>
   </el-dialog>
   </div>
-  <el-dialog
-    title="确认删除"
-    v-model:visible="confirmDeleteVisible"
-    :before-close="handleConfirmDeleteClose"
-  >
-    <span>确定要删除该任务吗？</span>
-    <span  class="dialog-footer">
-      <el-button size="small" @click="confirmDeleteVisible = false">取消</el-button>
-      <el-button type="danger" size="small" @click="deleteTask(row)">删除</el-button>
-    </span>
-  </el-dialog>
 </template>
 
 <script>
@@ -110,8 +111,6 @@ export default {
     const showUpdateDialog = ref(false); // 控制对话框显示的变量
     const currentTask = ref({}); // 当前选中的任务数据
     const router = useRouter();
-    const confirmDeleteVisible = ref(false); // 删除弹窗
-    const rowToDelete = ref({});
 
     const loadTaskPage = (page, pageSize) => {
       fetch(`/mo/task/page?page=${page}&size=${pageSize}`)
@@ -247,21 +246,6 @@ export default {
       });
     };
 
-    function showDeleteConfirm(row) {
-      confirmDeleteVisible.value = true;
-      rowToDelete.value = { ...row }; // 保存待删除的任务数据
-    }
-
-    function handleDeleteTask() {
-      deleteTask(rowToDelete);
-    }
-
-
-    function handleConfirmDeleteClose(done) {
-      // 如果需要在关闭对话框前执行某些清理操作，可以在此处添加
-      done(); // 调用 done() 以关闭对话框
-    }
-
     return {
       product,
       workstation,
@@ -282,10 +266,6 @@ export default {
       submitUpdateTask,
       backIndex,
       deleteTask,
-      confirmDeleteVisible,
-      showDeleteConfirm,
-      handleDeleteTask,
-      handleConfirmDeleteClose,
     };
   },
 };
