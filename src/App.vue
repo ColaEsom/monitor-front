@@ -1,17 +1,16 @@
 <template>
-  <IndexView msg="Welcome to Your Vue.js App"/>
-  <!-- <TaskProcessors msg="Welcome to Your Vue.js App"/> -->
+  <!-- <LoginView msg="Welcome to Your Vue.js App"/> -->
+   <!-- 声明路由的占位符 -->
+   <router-view></router-view>
 </template>
 
 <script>
-import IndexView from './components/views/IndexView.vue';
-// import TaskProcessors from './components/views/TaskProcessors.vue';
+// import LoginView from './components/views/LoginView.vue';
 
 export default {
   name: 'App',
   components: {
-    IndexView
-    // TaskProcessors
+    // LoginView
   }
 }
 </script>

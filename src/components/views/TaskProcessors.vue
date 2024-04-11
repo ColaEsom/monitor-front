@@ -25,9 +25,10 @@
 </template>
 
 <script>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 // eslint-disable-next-line
 import { ElInput, ElFormItem, ElTable, ElTableColumn, ElButton } from 'element-plus';
+import { useRoute } from 'vue-router';
 
 export default {
   components: {
@@ -41,6 +42,7 @@ export default {
   setup() {
     const workstation = ref('');
     const task = ref(null);
+    const route = useRoute();
 
     const fetchTaskInfo = () => {
       fetch(`/mo/info/${workstation.value}`)
@@ -78,6 +80,7 @@ export default {
         alert('任务更新失败，请重试。');
       });
     };
+
     const formatDate = (dateString) => {
       const date = new Date(dateString);
       // 检查日期是否有效
@@ -89,6 +92,11 @@ export default {
       const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
       return new Intl.DateTimeFormat('zh-CN', options).format(date).replace(/\//g, '-').replace(',', '');
     };
+
+    onMounted(() => {
+      workstation.value = route.query.username || '';
+      fetchTaskInfo();
+    });
 
     return {
       workstation,

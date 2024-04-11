@@ -1,8 +1,9 @@
 <template>
   <div>
      <!-- 新增任务按钮 -->
-     <el-button type="primary" @click="showDialog = true" style="float: right; margin-bottom: 20px;">新增任务</el-button>
-    
+    <el-button type="primary" @click="backIndex" style="float: right; margin-bottom: 20px;">返回首页</el-button>
+    <el-button type="primary" @click="showDialog = true" style="float: right; margin-bottom: 20px; margin-right: 20px">新增任务</el-button>
+
     <el-table :data="tasks" style="width: 100%; clear: both;">
       <el-table-column prop="product" label="产品名称" />
       <el-table-column prop="workstation" label="工位ID"/>
@@ -74,6 +75,7 @@
 <script>
 import { ref, onMounted } from 'vue';
 import { ElTable, ElTableColumn, ElPagination, ElForm, ElFormItem, ElInput, ElButton, ElDialog } from 'element-plus';
+import { useRouter } from 'vue-router';
 
 export default {
   components: {
@@ -98,6 +100,7 @@ export default {
     const showDialog = ref(false); // 控制对话框显示的变量
     const showUpdateDialog = ref(false); // 控制对话框显示的变量
     const currentTask = ref({}); // 当前选中的任务数据
+    const router = useRouter();
 
     const loadTaskPage = (page, pageSize) => {
       fetch(`/mo/task/page?page=${page}&size=${pageSize}`)
@@ -206,6 +209,10 @@ export default {
       showUpdateDialog.value = true; // 显示弹窗
     };
 
+    const backIndex = () => {
+        router.push('/');
+    };
+
     return {
       product,
       workstation,
@@ -224,6 +231,7 @@ export default {
       currentTask,
       showUpdateDialog,
       submitUpdateTask,
+      backIndex,
     };
   },
 };
