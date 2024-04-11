@@ -81,14 +81,11 @@ export default {
       });
     };
 
-    const formatDate = (dateString) => {
-      const date = new Date(dateString);
-      // 检查日期是否有效
+    const formatDate = (createTime) => {
+      const date = new Date(createTime.createTime);
       if (isNaN(date.getTime())) {
-        // 如果日期无效，返回一个默认值或错误信息
         return '无效日期';
       }
-      // 如果日期有效，继续格式化
       const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
       return new Intl.DateTimeFormat('zh-CN', options).format(date).replace(/\//g, '-').replace(',', '');
     };
